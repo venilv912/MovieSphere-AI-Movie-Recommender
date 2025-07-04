@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Movie Recommender 🎬</title>
+    <style>
+        body { font-family: Arial; background: #1e1e1e; color: #f1f1f1; padding: 2em; }
+        h1 { color: #00ffcc; }
+        form { margin-bottom: 1.5em; }
+        input[type="text"] {
+            padding: 0.5em;
+            width: 300px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            padding: 0.5em 1em;
+            background-color: #00ffcc;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .card {
+            background: #2e2e2e;
+            margin: 1em 0;
+            padding: 1em;
+            border-radius: 10px;
+        }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Movie Recommender System 🎥</h1>
+    <form method="POST">
+        <input type="text" name="title" placeholder="Enter a movie title..." required>
+        <button type="submit">Recommend</button>
+    </form>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if input_movie %}
+        <div class="card">
+            <h2>You searched for: {{ input_movie.title }}</h2>
+            <p><strong>Genres:</strong> {{ input_movie.genres }}</p>
+            <p><strong>Top Cast:</strong> {{ input_movie.cast }}</p>
+            <p><strong>Directors:</strong> {{ input_movie.directors }}</p>
+        </div>
+    {% endif %}
+
+    {% if recommendations %}
+        <h2>Top Recommendations:</h2>
+        {% for movie in recommendations %}
+            <div class="card">
+                <h3>{{ movie.title }}</h3>
+                <p><strong>Genres:</strong> {{ movie.genres }}</p>
+                <p><strong>Top Cast:</strong> {{ movie.cast }}</p>
+                <p><strong>Directors:</strong> {{ movie.directors }}</p>
+            </div>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>

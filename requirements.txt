@@ -1,0 +1,7 @@
+flask
+gunicorn
+pandas
+scikit-learn
+scipy
+joblib
+rapidfuzz
