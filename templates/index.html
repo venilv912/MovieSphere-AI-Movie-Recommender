@@ -43,6 +43,9 @@
     {% if input_movie %}
         <div class="card">
             <h2>You searched for: {{ input_movie.title }}</h2>
+            {% if input_movie.poster_url %}
+                <img src="{{ input_movie.poster_url }}" alt="Poster" style="height: 300px;">
+            {% endif %}
             <p><strong>Genres:</strong> {{ input_movie.genres }}</p>
             <p><strong>Top Cast:</strong> {{ input_movie.cast }}</p>
             <p><strong>Directors:</strong> {{ input_movie.directors }}</p>
@@ -51,14 +54,19 @@
 
     {% if recommendations %}
         <h2>Top Recommendations:</h2>
-        {% for movie in recommendations %}
-            <div class="card">
-                <h3>{{ movie.title }}</h3>
-                <p><strong>Genres:</strong> {{ movie.genres }}</p>
-                <p><strong>Top Cast:</strong> {{ movie.cast }}</p>
-                <p><strong>Directors:</strong> {{ movie.directors }}</p>
-            </div>
-        {% endfor %}
+        <div style="display: flex; flex-wrap: wrap; gap: 1em;">
+            {% for movie in recommendations %}
+                <div class="card" style="width: 200px;">
+                    <h3>{{ movie.title }}</h3>
+                    {% if movie.poster_url %}
+                        <img src="{{ movie.poster_url }}" alt="Poster" style="width: 100%;">
+                    {% endif %}
+                    <p><strong>Genres:</strong> {{ movie.genres }}</p>
+                    <p><strong>Cast:</strong> {{ movie.cast }}</p>
+                    <p><strong>Directors:</strong> {{ movie.directors }}</p>
+                </div>
+            {% endfor %}
+        </div>
     {% endif %}
 </body>
 </html>
