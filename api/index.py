@@ -17,7 +17,8 @@ app = Flask(__name__, template_folder="../templates")
 # Load components
 tfidf = joblib.load("tfidf_vectorizer.pkl")
 nn = joblib.load("nearest_neighbors_model.pkl")
-df = joblib.load("movies_dataframe.pkl")
+df = joblib.load("movies_data.pkl")
+popular_movies = joblib.load("popular_movies.pkl")
 tfidf_matrix = scipy.sparse.load_npz("tfidf_matrix.npz")
 
 def fuzzy_match_title(query, title_series, limit=5, threshold=70):
@@ -45,27 +46,6 @@ async def fetch_posters_concurrently(tmdb_ids):
         results = await asyncio.gather(*tasks)
         return dict(results)
 
-
-def get_popular_movies(n=20):
-    """Get popular movies from your dataset"""
-    # Sort by popularity or rating - adjust based on your dataframe columns
-    # You can modify this logic based on what columns you have in your df
-    popular_movies = df.nlargest(n, 'popularity') if 'popularity' in df.columns else df.head(n)
-    
-    # Get posters for popular movies
-    tmdb_ids = popular_movies['id'].tolist()
-    posters = asyncio.run(fetch_posters_concurrently(tmdb_ids))
-    
-    # Add poster URLs to movies
-    popular_movies_list = []
-    for _, movie in popular_movies.iterrows():
-        movie_dict = movie.to_dict()
-        movie_dict['poster_url'] = posters.get(movie['id'])
-        popular_movies_list.append(movie_dict)
-    
-    return popular_movies_list
-
-
 def recommend(title, n=5):
     title = title.lower().strip()
     matches = fuzzy_match_title(title, df['title'].str.lower())
@@ -89,13 +69,17 @@ def recommend(title, n=5):
 
     recommendations = []
     for i in recommended_indices:
-        movie = df.iloc[i].copy()
-        movie['poster_url'] = posters.get(movie['id'])
+        row = df.iloc[i]
+        movie = {
+            'title': row['title'],
+            'release_year': row['release_year'],
+            'poster_url': posters.get(row['id'])
+        }
         recommendations.append(movie)
 
     return {
         "input_movie": input_movie.to_dict(),
-        "recommendations": [m.to_dict() for m in recommendations]
+        "recommendations": recommendations
     }
 
 
@@ -111,7 +95,6 @@ def home():
                                show_search_results=True)
     
     # GET request - show home page with popular movies
-    popular_movies = get_popular_movies(20)
     return render_template("index.html", popular_movies=popular_movies, show_search_results=False)
 
 
@@ -124,5 +107,4 @@ def recommend_api():
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
-    
+    app.run(host="0.0.0.0", port=port, debug=True)

@@ -689,7 +689,7 @@
                 <h2 class="popular-title">🔥 Popular Movies</h2>
                 <div class="slider-container">
                     <div class="slider-wrapper" id="sliderWrapper">
-                        {% for movie in popular_movies[:10] %}
+                        {% for movie in popular_movies %}
                             <div class="slide">
                                 {% if movie.poster_url %}
                                     <div class="slide-bg" style="background-image: url('{{ movie.poster_url }}');"></div>
@@ -748,11 +748,11 @@
                                 <span>{{ input_movie.genres }}</span>
                             </div>
                             <div class="detail-row">
-                                <span class="detail-label">Language:</span>
-                                <span>{{ input_movie.original_language }}</span>
+                                <span class="detail-label">Studios:</span>
+                                <span>{{ input_movie.production_companies }}</span>
                             </div>
                             <div class="detail-row">
-                                <span class="detail-label">Spoken:</span>
+                                <span class="detail-label">Languages:</span>
                                 <span>{{ input_movie.spoken_language_names }}</span>
                             </div>
                             <div class="detail-row">
@@ -790,7 +790,7 @@
                                         <img src="{{ movie.poster_url }}" alt="Movie Poster" loading="lazy">
                                     {% endif %}
                                     <h3>{{ movie.title }}</h3>
-                                    <p>({{ movie.release_year }})</p>
+                                    <p>{{ movie.release_year }}</p>
                                 </button>
                             </form>
                         </div>
