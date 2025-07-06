@@ -48,7 +48,7 @@
 
         h1 {
             font-family: 'Inter', sans-serif;
-            font-size: 3.5rem;
+            font-size: 3rem;
             font-weight: 800;
             text-align: center;
             margin-bottom: 2rem;
@@ -307,12 +307,17 @@
             border: none;
             color: #ffffff;
             font-size: 2rem;
-            padding: 1rem;
+            width: 50px;
+            height: 50px;
+            padding: 0;
             border-radius: 50%;
             cursor: pointer;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
             z-index: 3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .slider-nav:hover {
@@ -686,7 +691,7 @@
         <!-- Popular Movies Slider (Home Page) -->
         {% if not show_search_results and popular_movies %}
             <div class="popular-section">
-                <h2 class="popular-title">🔥 Popular Movies</h2>
+                <h2 class="popular-title">Popular Movies</h2>
                 <div class="slider-container">
                     <div class="slider-wrapper" id="sliderWrapper">
                         {% for movie in popular_movies %}
@@ -703,7 +708,7 @@
                                     <div class="slide-info">
                                         <h3 class="slide-title">{{ movie.title }}</h3>
                                         <div class="slide-year">{{ movie.release_year }}</div>
-                                        <div class="slide-genres">{{ movie.genres }}</div>
+                                        <div class="slide-genres">{{ movie.genres | join(', ') }}</div>
                                         <div class="slide-overview">
                                             {{ movie.overview[:200] }}{% if movie.overview|length > 200 %}...{% endif %}
                                         </div>
@@ -745,15 +750,15 @@
                             </div>
                             <div class="detail-row">
                                 <span class="detail-label">Genres:</span>
-                                <span>{{ input_movie.genres }}</span>
+                                <span>{{ input_movie.genres | join(', ') }}</span>
                             </div>
                             <div class="detail-row">
                                 <span class="detail-label">Studios:</span>
-                                <span>{{ input_movie.production_companies }}</span>
+                                <span>{{ input_movie.production_companies | join(', ') }}</span>
                             </div>
                             <div class="detail-row">
                                 <span class="detail-label">Languages:</span>
-                                <span>{{ input_movie.spoken_language_names }}</span>
+                                <span>{{ input_movie.spoken_language_names | join(', ') }}</span>
                             </div>
                             <div class="detail-row">
                                 <span class="detail-label">Runtime:</span>
@@ -764,11 +769,11 @@
                     <div class="section">
                         <div class="detail-row">
                             <span class="detail-label">Cast:</span>
-                            <span>{{ input_movie.cast }}</span>
+                            <span>{{ input_movie.cast | join(', ') }}</span>
                         </div>
                         <div class="detail-row">
-                            <span class="detail-label">Directors:</span>
-                            <span>{{ input_movie.directors }}</span>
+                            <span class="detail-label">Director:</span>
+                            <span>{{ input_movie.directors | join(', ') }}</span>
                         </div>
                         <div class="detail-row">
                             <span class="detail-label">Overview:</span>
@@ -779,7 +784,7 @@
             {% endif %}
 
             {% if recommendations %}
-                <h2 class="recommendations-title">🎯 Recommended For You</h2>
+                <h2 class="recommendations-title">Recommended For You</h2>
                 <div class="recommendations-container">
                     {% for movie in recommendations %}
                         <div class="recommendation-card">
